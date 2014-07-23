@@ -166,7 +166,7 @@ test('PropertyWriter should convert an array to identically named keys', functio
         t.notOk(err);
         t.ok(data);
 
-        t.equal(data,  ['arrayTest2=value1', 'arrayTest2=value2', 'arrayTest2=value3', ''].join(os.EOL) );
+        t.equal(data,  ['arrayTest2[0]=value1', 'arrayTest2[1]=value2', 'arrayTest2[2]=value3', ''].join(os.EOL) );
         t.end();
     });
 });
@@ -185,7 +185,8 @@ test('PropertyWriter should convert an array in a compound object to namespaced 
         t.notOk(err);
         t.ok(data);
 
-        t.equal(data,  ['arrayTest3.key1=value1', 'arrayTest3.key1=value2', 'arrayTest3.key1=value3', ''].join(os.EOL) );
+        t.equal(data,  ['arrayTest3.key1[0]=value1', 'arrayTest3.key1[1]=value2', 'arrayTest3.key1[2]=value3', ''].join(os.EOL) );
+
         t.end();
     });
 });
@@ -206,7 +207,7 @@ test('PropertyWriter should convert complex objects to namespaced keys and value
         t.notOk(err);
         t.ok(data);
 
-        t.equal(data.toString('utf-8'),  ['arrayTest4.a.key1=value1', 'arrayTest4.a.key1=value2', 'arrayTest4.a.key1=value3','arrayTest4.b=value1', 'arrayTest4.b=value2', 'arrayTest4.b=value3', 'arrayTest4.c.key1=test foo', ''].join(os.EOL) );
+        t.equal(data.toString('utf-8'),  ['arrayTest4.a.key1[0]=value1', 'arrayTest4.a.key1[1]=value2', 'arrayTest4.a.key1[2]=value3','arrayTest4.b[0]=value1', 'arrayTest4.b[1]=value2', 'arrayTest4.b[2]=value3', 'arrayTest4.c.key1=test foo', ''].join(os.EOL) );
         t.end();
     }));
 });
