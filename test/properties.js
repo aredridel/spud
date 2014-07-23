@@ -6,6 +6,7 @@ var util = require('util'),
     test = require('tape'),
 	os = require('os'),
     bl = require('bl'),
+    fs = require('fs'),
 	helpers = require('./helpers'),
 	PropertySerializer = require('../lib/serializer/properties');
 
@@ -209,3 +210,35 @@ test('PropertyWriter should convert complex objects to namespaced keys and value
         t.end();
     }));
 });
+
+test('Property deserialization->serialization should be lossless', function(t) {
+    var reader = new PropertySerializer.Reader();
+    var filePath = './test/properties/locales/en-US/lossless.properties';
+    helpers.read( filePath, reader, function (err, data) {
+        t.notOk(err);
+        t.ok(data);
+
+        t.equal(data.foo, '   bar ');
+        t.equal(data['John Smith'], 'name');
+        t.equal(data.test.me.here, '  yes ');
+        t.equal(data.also.test.this.string.here, 'yay    ')
+
+        var writer = new PropertySerializer.Writer();
+        writer.data = data
+
+        writer.createReadStream().pipe(bl(function (err, data) {
+            t.notOk(err);
+            t.ok(data);
+
+            fs.readFile( filePath, function( err, dataFile ) {
+                t.notOk( err );
+                t.ok( dataFile );
+
+                t.equal( data.toString('utf-8'), dataFile.toString('utf-8') );
+                t.end()
+            });
+
+        }));
+
+    });
+} );
